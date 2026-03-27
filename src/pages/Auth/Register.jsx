@@ -47,8 +47,8 @@ function Register() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#FBFBFB] animate-in fade-in duration-500">
-      <div className="w-full max-w-[460px] px-6">
-        <div className="bg-white p-10 md:p-12 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
+      <div className="w-full max-w-115 px-6">
+        <div className="bg-white p-10 md:p-12 rounded-4xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
           
           {/* Header Section - Same as Login */}
           <div className="flex flex-col items-center mb-10 text-center">

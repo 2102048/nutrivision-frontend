@@ -104,7 +104,7 @@ function Sidebar() {
       {/* Brand Header */}
       <div className="p-8 pb-6">
         <div className="flex items-center gap-3 text-2xl font-black text-slate-900 tracking-tight">
-          <div className="bg-gradient-to-br from-green-500 to-green-600 p-2 rounded-xl text-white shadow-md">
+          <div className="bg-linear-to-br from-green-500 to-green-600 p-2 rounded-xl text-white shadow-md">
             <SparklesIcon className="w-6 h-6" />
           </div>
           NutriVision
@@ -172,7 +172,7 @@ function Sidebar() {
                 <div className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${
                   isBMISource ? "bg-indigo-50 border-indigo-100 text-indigo-600" : "bg-slate-50 border-slate-100 text-slate-500"
                 }`}>
-                  <CheckBadgeIcon className="w-4 h-4 flex-shrink-0" />
+                  <CheckBadgeIcon className="w-4 h-4 shrink-0" />
                   <span className="text-[10px] font-bold uppercase tracking-tight">
                     {isBMISource ? "Synced with BMI Analysis" : "Manual Macro Targets"}
                   </span>

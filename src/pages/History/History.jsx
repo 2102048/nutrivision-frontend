@@ -112,7 +112,7 @@ const History = () => {
       </div>
 
       {/* FILTERS SECTION */}
-      <div className="bg-white p-6 rounded-[32px] shadow-sm border border-slate-100 space-y-4">
+      <div className="bg-white p-6 rounded-4xl shadow-sm border border-slate-100 space-y-4">
         {/* 🔍 SEARCH */}
         <div className="relative group">
           <input
@@ -187,7 +187,7 @@ const History = () => {
       {/* 🧾 DATA LIST */}
       <div className="space-y-4">
         {sortedMeals.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-[32px] border-2 border-dashed border-slate-100">
+          <div className="text-center py-12 bg-white rounded-4xl border-2 border-dashed border-slate-100">
             <UtensilsCrossed size={48} className="mx-auto text-slate-200 mb-3" />
             <p className="text-slate-400 font-bold">No meals found for this period.</p>
           </div>

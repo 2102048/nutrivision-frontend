@@ -13,7 +13,7 @@ const ProgressBar = ({ label, value = 0, goal = 0, icon, color }) => {
   const percent = safeGoal > 0 ? Math.min((safeValue / safeGoal) * 100, 100) : 0;
 
   return (
-    <div className="bg-white p-6 rounded-[24px] shadow-sm border border-slate-100 flex flex-col h-full">
+    <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col h-full">
       <div className="flex items-center gap-3 mb-4">
         <div className={`w-10 h-10 ${color.bg} ${color.text} rounded-xl flex items-center justify-center`}>
           {icon}
@@ -155,7 +155,7 @@ const Dashboard = () => {
       {filteredHistory.length === 0 && (
         <div 
           onClick={() => navigate('/scan')}
-          className="bg-white rounded-[32px] border-2 border-dashed border-slate-200 p-12 text-center cursor-pointer hover:border-green-400 hover:bg-green-50/20 transition-all group"
+          className="bg-white rounded-4xl border-2 border-dashed border-slate-200 p-12 text-center cursor-pointer hover:border-green-400 hover:bg-green-50/20 transition-all group"
         >
           <div className="w-16 h-16 bg-green-50 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
             <Plus className="text-green-500" />
@@ -172,7 +172,7 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
         {/* CALORIE HERO CARD */}
-        <div className="lg:col-span-2 bg-white p-8 rounded-[32px] shadow-sm border border-slate-100 flex flex-col md:flex-row items-center gap-10 relative overflow-hidden">
+        <div className="lg:col-span-2 bg-white p-8 rounded-4xl shadow-sm border border-slate-100 flex flex-col md:flex-row items-center gap-10 relative overflow-hidden">
           
           {viewMode === "daily" && (
             <div className="absolute top-6 right-8">
@@ -190,7 +190,7 @@ const Dashboard = () => {
             </div>
           )}
 
-          <div className="relative w-40 h-40 flex-shrink-0">
+          <div className="relative w-40 h-40 shrink-0">
              <svg className="w-full h-full transform -rotate-90">
                 <circle cx="80" cy="80" r="70" stroke="currentColor" strokeWidth="12" fill="transparent" className="text-slate-50" />
                 <circle cx="80" cy="80" r="70" stroke="currentColor" strokeWidth="12" fill="transparent" 
@@ -202,7 +202,7 @@ const Dashboard = () => {
              </div>
           </div>
 
-          <div className="flex-grow text-center md:text-left">
+          <div className="grow text-center md:text-left">
             <h4 className="text-slate-400 font-bold uppercase tracking-wider text-xs mb-1">
               {viewMode === "daily" ? "Today's Consumption" : `${viewMode === "weekly" ? "Weekly" : "Monthly"} Target`}
             </h4>
@@ -229,14 +229,14 @@ const Dashboard = () => {
 
       {/* CHARTS */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-        <div className="bg-white p-8 rounded-[32px] shadow-sm border border-slate-100 flex flex-col min-h-[450px]">
+        <div className="bg-white p-8 rounded-4xl shadow-sm border border-slate-100 flex flex-col min-h-112.5">
           <h3 className="text-lg font-bold text-slate-900 mb-6">Calories Trend</h3>
-          <div className="flex-grow"><CaloriesChart /></div>
+          <div className="grow"><CaloriesChart /></div>
         </div>
 
-        <div className="bg-white p-8 rounded-[32px] shadow-sm border border-slate-100 flex flex-col">
+        <div className="bg-white p-8 rounded-4xl shadow-sm border border-slate-100 flex flex-col">
           <h3 className="text-lg font-bold text-slate-900 mb-6">Macro Distribution</h3>
-          <div className="flex-grow flex items-center justify-center">
+          <div className="grow flex items-center justify-center">
             {totals.calories > 0 ? <MacroPieChart /> : <div className="text-slate-300 italic text-sm">No macro data logged</div>}
           </div>
           <div className="flex justify-around mt-8 pt-6 border-t border-slate-50 font-bold text-xs uppercase tracking-widest text-slate-500">
@@ -246,7 +246,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="xl:col-span-2 bg-white p-8 rounded-[32px] shadow-sm border border-slate-100">
+        <div className="xl:col-span-2 bg-white p-8 rounded-4xl shadow-sm border border-slate-100">
           <h3 className="text-lg font-bold text-slate-900 mb-6">Calories by Category</h3>
           <div className="h-72"><CategoryChart /></div>
         </div>

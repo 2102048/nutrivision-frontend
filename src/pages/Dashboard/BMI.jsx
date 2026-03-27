@@ -209,7 +209,7 @@ const BMI = () => {
                 <h3 className="text-xl font-black text-slate-800 tracking-tight">Physiological Trend</h3>
              </div>
              
-             <div className="h-[340px] w-full">
+             <div className="h-85 w-full">
                <ResponsiveContainer>
                   <AreaChart data={history}>
                     <defs>

@@ -4,11 +4,11 @@ importScripts("https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"
 importScripts("https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging-compat.js");
 
 firebase.initializeApp({
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID",
+  apiKey: "AIzaSyCzDfE70DkdhRSkwZEXa8kWUjr0tTvYfyM",
+  authDomain: "nutrivision-7be6f.firebaseapp.com",
+  projectId: "nutrivision-7be6f",
+  messagingSenderId: "397403275003",
+  appId: "1:397403275003:web:e5a266fd0dafe84d9d3a5e",
 });
 
 const messaging = firebase.messaging();

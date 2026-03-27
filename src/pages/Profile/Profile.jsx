@@ -113,7 +113,7 @@ const Profile = () => {
 
       <div className="flex flex-wrap gap-8">
         {/* ================= PROFILE CARD ================= */}
-        <div className="bg-white p-8 rounded-[32px] shadow-sm border border-slate-100 flex-1 min-w-[320px] space-y-6 hover:shadow-md transition-shadow">
+        <div className="bg-white p-8 rounded-4xl shadow-sm border border-slate-100 flex-1 min-w-[320px] space-y-6 hover:shadow-md transition-shadow">
           <div className="flex items-center gap-3 border-b border-slate-50 pb-4">
             <div className="p-2 bg-blue-50 text-blue-600 rounded-xl">
               <User size={20} />
@@ -172,7 +172,7 @@ const Profile = () => {
         </div>
 
         {/* ================= HEALTH CARD ================= */}
-        <div className="bg-white p-8 rounded-[32px] shadow-sm border border-slate-100 w-full lg:w-80 space-y-6 hover:shadow-md transition-shadow">
+        <div className="bg-white p-8 rounded-4xl shadow-sm border border-slate-100 w-full lg:w-80 space-y-6 hover:shadow-md transition-shadow">
           <div className="flex items-center gap-3 border-b border-slate-50 pb-4">
             <div className="p-2 bg-orange-50 text-orange-600 rounded-xl">
               <Activity size={20} />
@@ -204,7 +204,7 @@ const Profile = () => {
         </div>
 
         {/* ================= PASSWORD CARD ================= */}
-        <div className="bg-white p-8 rounded-[32px] shadow-sm border border-slate-100 flex-1 min-w-[320px] space-y-6 hover:shadow-md transition-shadow">
+        <div className="bg-white p-8 rounded-4xl shadow-sm border border-slate-100 flex-1 min-w-[320px] space-y-6 hover:shadow-md transition-shadow">
           <div className="flex items-center gap-3 border-b border-slate-50 pb-4">
             <div className="p-2 bg-red-50 text-red-600 rounded-xl">
               <Lock size={20} />

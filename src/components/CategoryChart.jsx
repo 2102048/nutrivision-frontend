@@ -42,7 +42,7 @@ const CategoryChart = () => {
   };
 
   return (
-    <div className="w-full h-full min-h-[250px]">
+    <div className="w-full h-full min-h-62.5">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
           <XAxis 

@@ -175,7 +175,7 @@ const AINutritionAssistant = () => {
   }, [messages, loading]);
 
   return (
-    <div className="flex flex-col w-full max-w-[1000px] mx-auto bg-white rounded-[32px] shadow-2xl shadow-blue-900/5 border border-slate-100 overflow-hidden h-[650px] transition-all">
+    <div className="flex flex-col w-full max-w-250 mx-auto bg-white rounded-4xl shadow-2xl shadow-blue-900/5 border border-slate-100 overflow-hidden h-162.5 transition-all">
       
       {/* --- HEADER --- */}
       <div className="bg-white px-8 py-5 border-b border-slate-100 flex items-center justify-between">
@@ -187,7 +187,7 @@ const AINutritionAssistant = () => {
             <h3 className="font-bold text-slate-900 text-base">NutriVision Intelligence</h3>
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
-              <p className="text-[10px] text-blue-600 font-bold uppercase tracking-[0.1em]">Internal App Data Synced</p>
+              <p className="text-[10px] text-blue-600 font-bold uppercase tracking-widest">Internal App Data Synced</p>
             </div>
           </div>
         </div>
@@ -243,7 +243,7 @@ const AINutritionAssistant = () => {
 
       {/* --- INPUT FOOTER --- */}
       <div className="p-6 bg-white border-t border-slate-100">
-        <div className="flex items-center gap-3 bg-slate-50 border border-slate-200 p-2 rounded-[24px] focus-within:ring-4 focus-within:ring-blue-500/5 focus-within:border-blue-400 transition-all">
+        <div className="flex items-center gap-3 bg-slate-50 border border-slate-200 p-2 rounded-3xl focus-within:ring-4 focus-within:ring-blue-500/5 focus-within:border-blue-400 transition-all">
           <input
             type="text"
             value={input}

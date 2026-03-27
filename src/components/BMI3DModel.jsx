@@ -112,7 +112,7 @@ const BMI3DModel = ({ bmi, height, weight, calories, gender, age }) => {
   return (
     <div className="grid md:grid-cols-2 gap-8 items-stretch p-4 bg-white">
       {/* 3D Visualizer Card */}
-      <div className="bg-slate-50 rounded-3xl p-2 shadow-inner border border-slate-200 relative min-h-[600px] flex items-center justify-center overflow-hidden">
+      <div className="bg-slate-50 rounded-3xl p-2 shadow-inner border border-slate-200 relative min-h-150 flex items-center justify-center overflow-hidden">
         {/* Adjusted FOV to 35 to "zoom in" slightly more on the content */}
         <Canvas shadows camera={{ fov: 35 }}>
           <ambientLight intensity={1.8} />

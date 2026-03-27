@@ -1,17 +1,1 @@
 @import "tailwindcss";
-
-/* If your editor shows a red line under @import or @apply, 
-   it's a 'Linting' error, not a code error. 
-   The browser will still run it fine! 
-*/
-
-@layer base {
-  body {
-    /* Using standard CSS instead of @apply here 
-       prevents the editor from complaining */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: #111827; /* gray-900 */
-    background-color: #f9fafb; /* gray-50 */
-  }
-}
