@@ -74,9 +74,12 @@ function Sidebar() {
   };
 
   const calculatedCalories =
-    Number(form.protein_goal || 0) * 4 +
-    Number(form.carbs_goal || 0) * 4 +
-    Number(form.fat_goal || 0) * 9;
+    goal?.calorie_goal ??
+    (
+      Number(form.protein_goal || 0) * 4 +
+      Number(form.carbs_goal || 0) * 4 +
+      Number(form.fat_goal || 0) * 9
+    );
 
   const handleSave = async () => {
     try {

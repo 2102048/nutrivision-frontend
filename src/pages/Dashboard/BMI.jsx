@@ -15,6 +15,7 @@ const BMI = () => {
     age: "",
     gender: "male",
     activity_level: "moderate",
+      goal_type: "maintain", // ✅ ADD THIS
   });
 
   const [result, setResult] = useState(null);
@@ -80,10 +81,11 @@ const BMI = () => {
     try {
       // Explicitly passing the source so the Dashboard can display it
       await updateGoal({
+        calorie_goal: cal,  // ✅ ADD THIS LINE
         protein_goal: Math.round((cal * 0.30) / 4),
         carbs_goal: Math.round((cal * 0.40) / 4),
         fat_goal: Math.round((cal * 0.30) / 9),
-        goal_source: "bmi" 
+        goal_source: "bmi"
       });
       setGoalsApplied(true);
     } catch (error) {
@@ -143,6 +145,20 @@ const BMI = () => {
                   <option value="active">Very Active</option>
                 </select>
               </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-black text-slate-400 uppercase ml-1">
+                  Goal
+                </label>
+                <select
+                  value={form.goal_type || "maintain"}
+                  onChange={e => setForm({ ...form, goal_type: e.target.value })}
+                  className="w-full bg-slate-50 border-none p-4 rounded-2xl text-slate-700 font-bold focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all"
+                >
+                  <option value="maintain">Maintain Weight</option>
+                  <option value="gain">Gain Weight</option>
+                  <option value="lose">Lose Weight</option>
+                </select>
+              </div>
 
               <button onClick={handleSubmit} disabled={loading} className="w-full bg-slate-900 hover:bg-black text-white font-black py-5 rounded-3xl shadow-xl shadow-slate-200 transition-all active:scale-95 disabled:opacity-50">
                 {loading ? "Calculating..." : "Update Analytics"}
@@ -178,6 +194,10 @@ const BMI = () => {
                       <span className="text-5xl font-black text-slate-800">{result.recommended_calories}</span>
                       <span className="text-xs font-bold text-slate-400 ml-2 uppercase">kcal</span>
                     </div>
+                    {/* ✅ ADD HERE */}
+                    <p className="text-xs text-slate-500 mt-2 text-center">
+                      Protein: {result.protein_grams}g | Carbs: {result.carbs_grams}g | Fat: {result.fat_grams}g
+                    </p>
                   </div>
                   
                   <div className="mt-6 flex items-start gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100">
@@ -186,6 +206,10 @@ const BMI = () => {
                       Clicking below will set your global **Daily Goals** to these values and label the source as **BMI**.
                     </p>
                   </div>
+                  {/* ✅ ADD HERE */}
+                  <p className="text-sm text-slate-400 mt-2 italic text-center">
+                    {result.recommendation}
+                  </p>
 
                   <button 
                     onClick={applyBMIGoals} 

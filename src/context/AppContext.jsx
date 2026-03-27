@@ -125,7 +125,11 @@ export const AppProvider = ({ children }) => {
       const carbs = Number(updatedFields.carbs_goal ?? goal.carbs_goal ?? 0);
       const fat = Number(updatedFields.fat_goal ?? goal.fat_goal ?? 0);
 
-      const calories = protein * 4 + carbs * 4 + fat * 9;
+      // ✅ FIX: USE calorie_goal if provided
+      const calories =
+        updatedFields.calorie_goal !== undefined
+          ? Number(updatedFields.calorie_goal)
+          : (protein * 4 + carbs * 4 + fat * 9);
 
       const payload = {
         calorie_goal: calories,
