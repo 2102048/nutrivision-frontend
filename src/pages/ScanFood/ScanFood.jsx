@@ -47,11 +47,15 @@ const ScanFood = () => {
   const [unit, setUnit] = useState("g");
 
   // Scroll to review section when food is detected or items are added
-  useEffect(() => {
-    if ((aiFoods.length > 0 || scannedFood) && reviewRef.current) {
-      reviewRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }, [aiFoods.length, scannedFood]);
+ useEffect(() => {
+  // Only auto-scroll for AI mode
+  if (mode === "ai" && aiFoods.length > 0 && reviewRef.current) {
+    reviewRef.current.scrollIntoView({ 
+      behavior: 'smooth', 
+      block: 'start' 
+    });
+  }
+}, [aiFoods, mode]);
 
   // Recalculate totals and meal name when aiFoods list changes
   useEffect(() => {
