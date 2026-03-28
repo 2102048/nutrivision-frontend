@@ -41,12 +41,30 @@ const BMI = () => {
           age: latest.age || "",
           gender: latest.gender || "male",
           activity_level: latest.activity_level || "moderate",
+          goal_type: latest.goal_type || "maintain",
         });
 
         setResult({
           bmi: latest.bmi,
           category: latest.category,
           recommended_calories: latest.recommended_calories,
+
+          // ✅ SAFE FALLBACK LOGIC
+          protein_grams:
+            latest.protein_grams ??
+            (latest.recommended_calories * 0.3) / 4,
+
+          carbs_grams:
+            latest.carbs_grams ??
+            (latest.recommended_calories * 0.4) / 4,
+
+          fat_grams:
+            latest.fat_grams ??
+            (latest.recommended_calories * 0.3) / 9,
+
+          recommendation:
+            latest.recommendation ||
+            "Personalized nutrition guidance based on your profile.",
         });
       } catch (error) {
         console.error("Failed to load BMI history:", error);
@@ -81,10 +99,10 @@ const BMI = () => {
     try {
       // Explicitly passing the source so the Dashboard can display it
       await updateGoal({
-        calorie_goal: cal,  // ✅ ADD THIS LINE
-        protein_goal: Math.round((cal * 0.30) / 4),
-        carbs_goal: Math.round((cal * 0.40) / 4),
-        fat_goal: Math.round((cal * 0.30) / 9),
+        calorie_goal: cal,
+        protein_goal: result.protein_grams,
+        carbs_goal: result.carbs_grams,
+        fat_goal: result.fat_grams,
         goal_source: "bmi"
       });
       setGoalsApplied(true);
@@ -196,7 +214,9 @@ const BMI = () => {
                     </div>
                     {/* ✅ ADD HERE */}
                     <p className="text-xs text-slate-500 mt-2 text-center">
-                      Protein: {result.protein_grams}g | Carbs: {result.carbs_grams}g | Fat: {result.fat_grams}g
+                      Protein: {result.protein_grams ?? "-"}g | 
+                      Carbs: {result.carbs_grams ?? "-"}g | 
+                      Fat: {result.fat_grams ?? "-"}g                  
                     </p>
                   </div>
                   
@@ -208,7 +228,7 @@ const BMI = () => {
                   </div>
                   {/* ✅ ADD HERE */}
                   <p className="text-sm text-slate-400 mt-2 italic text-center">
-                    {result.recommendation}
+                    {result.recommendation || "Personalized nutrition guidance based on your profile."}
                   </p>
 
                   <button 
