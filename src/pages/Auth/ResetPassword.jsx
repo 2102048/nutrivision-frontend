@@ -1,17 +1,26 @@
 import { useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import { Lock, Loader2, ArrowRight, Sparkles, CheckCircle2, ShieldAlert } from "lucide-react";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 function ResetPassword() {
-  const { token } = useParams();
+  const [params] = useSearchParams();
+  const token = params.get("token");
   const navigate = useNavigate();
 
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
   const [loading, setLoading] = useState(false);
+
+   if (!token) {
+      return (
+        <div style={{ padding: "40px", textAlign: "center" }}>
+          <h2>Invalid or missing token</h2>
+        </div>
+      );
+    }
 
   const handleSubmit = async (e) => {
     e.preventDefault();

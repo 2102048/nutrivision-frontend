@@ -94,7 +94,7 @@ function InnerApp({ token }) {
         />
 
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         {/* 🔒 PROTECTED ROUTES */}
         <Route
