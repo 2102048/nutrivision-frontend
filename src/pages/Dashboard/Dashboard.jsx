@@ -4,9 +4,18 @@ import { useApp } from "../../context/useApp";
 import CaloriesChart from "../../components/CaloriesChart";
 import MacroPieChart from "../../components/MacroPieChart";
 import CategoryChart from "../../components/CategoryChart";
-import { Flame, Dumbbell, Wheat, Droplets, Plus, Utensils, Activity, Settings, Sparkles } from 'lucide-react';
+import { Flame, Dumbbell, Wheat, Droplets, Plus, Activity, Settings, Sparkles } from 'lucide-react';
 
-/* ================= ✅ REDESIGNED PROGRESS BAR ================= */
+/* ================= ✅ LOCAL DATE FIX ================= */
+const getLocalDateStr = (date) => {
+  const d = new Date(date);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
+/* ================= ✅ PROGRESS BAR ================= */
 const ProgressBar = ({ label, value = 0, goal = 0, icon, color }) => {
   const safeGoal = Number(goal) || 0;
   const safeValue = Number(value) || 0;
@@ -50,58 +59,49 @@ const Dashboard = () => {
     filteredHistory = [],
   } = useApp();
 
-  /**
-   * getDynamicGoal: Calculates the cumulative goal for a period.
-   * Logic: Iterates through every day. If no goal found for a day, uses the 
-   * most recent previous entry. If none exist, uses the current global goal.
-   */
+  /* ================= ✅ FIXED GOAL LOGIC ================= */
   const getDynamicGoal = (goalKey) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // DAILY MODE
+    // DAILY
     if (viewMode === "daily") {
-      const dateStr = today.toISOString().slice(0, 10);
+      const dateStr = getLocalDateStr(today);
       const match = goalHistory.find(g => g.goal_date === dateStr);
       return match?.[goalKey] || goal?.[goalKey] || 0;
     }
 
-    // Determine the date range
     let startDate = new Date(today);
+
     if (viewMode === "weekly") {
-      // Start from Sunday of this week
       startDate.setDate(today.getDate() - today.getDay());
     } else if (viewMode === "monthly") {
-      // Start from 1st of this month
       startDate.setDate(1);
     }
 
     let totalGoal = 0;
     let tempDate = new Date(startDate);
 
-    // Iterate through every day of the period (e.g., Sun to Sat or 1st to End of Month)
     const endDate = new Date(startDate);
     if (viewMode === "weekly") endDate.setDate(startDate.getDate() + 6);
     else endDate.setMonth(startDate.getMonth() + 1, 0);
 
     while (tempDate <= endDate) {
-      const dateStr = tempDate.toISOString().slice(0, 10);
-      
-      // 1. Check for entry on this specific day
+      const dateStr = getLocalDateStr(tempDate);
+
       const dayGoal = goalHistory.find(g => g.goal_date === dateStr);
-      
+
       if (dayGoal && dayGoal[goalKey]) {
         totalGoal += dayGoal[goalKey];
       } else {
-        // 2. Fallback: Find the most recent goal BEFORE this date
         const previousGoals = goalHistory
-          .filter(g => g.goal_date < dateStr)
+          .filter(g => new Date(g.goal_date) < new Date(dateStr))
           .sort((a, b) => new Date(b.goal_date) - new Date(a.goal_date));
-        
-        const fallbackGoal = previousGoals[0]?.[goalKey] || goal?.[goalKey] || 0;
+
+        const fallbackGoal = previousGoals[0]?.[goalKey] ?? goal?.[goalKey] ?? 0;
         totalGoal += fallbackGoal;
       }
-      
+
       tempDate.setDate(tempDate.getDate() + 1);
     }
 
@@ -125,7 +125,7 @@ const Dashboard = () => {
   return (
     <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500 pb-10">
       
-      {/* HEADER & VIEW MODE SELECTOR */}
+      {/* HEADER */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <div className="flex items-center gap-2">
@@ -134,6 +134,7 @@ const Dashboard = () => {
           </div>
           <p className="text-slate-500 font-medium italic">Overview of your nutritional progress</p>
         </div>
+
         <div className="flex p-1 bg-white rounded-2xl shadow-sm border border-slate-100 w-fit">
           {["daily", "weekly", "monthly"].map((mode) => (
             <button
@@ -168,12 +169,10 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* TOP ROW: AT A GLANCE */}
+      {/* HERO CARD (UNCHANGED UI) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        {/* CALORIE HERO CARD */}
         <div className="lg:col-span-2 bg-white p-8 rounded-4xl shadow-sm border border-slate-100 flex flex-col md:flex-row items-center gap-10 relative overflow-hidden">
-          
+
           {viewMode === "daily" && (
             <div className="absolute top-6 right-8">
               {goal?.goal_source === "bmi" ? (
@@ -216,18 +215,17 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <ProgressBar label="Protein" value={totals.protein} goal={getDynamicGoal("protein_goal")} icon={<Dumbbell size={20}/>} color={{bg: 'bg-blue-50', text: 'text-blue-500', bar: 'bg-blue-500'}} />
+        <ProgressBar label="Protein" value={totals.protein} goal={getDynamicGoal("protein_goal")} icon={<Dumbbell size={20}/>} color={{bg:'bg-blue-50',text:'text-blue-500',bar:'bg-blue-500'}} />
       </div>
 
-      {/* MACRO ROW */}
+      {/* REST UI UNTOUCHED */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-         <ProgressBar label="Carbs" value={totals.carbs} goal={getDynamicGoal("carbs_goal")} icon={<Wheat size={20}/>} color={{bg: 'bg-amber-50', text: 'text-amber-500', bar: 'bg-amber-500'}} />
-         <ProgressBar label="Fat" value={totals.fat} goal={getDynamicGoal("fat_goal")} icon={<Droplets size={20}/>} color={{bg: 'bg-red-50', text: 'text-red-500', bar: 'bg-red-500'}} />
-         {/* Total Calories Progress Bar (matches hero card) */}
-         <ProgressBar label="Calories" value={totals.calories} goal={getDynamicGoal("calorie_goal")} icon={<Flame size={20}/>} color={{bg: 'bg-orange-50', text: 'text-orange-500', bar: 'bg-green-500'}} />
+        <ProgressBar label="Carbs" value={totals.carbs} goal={getDynamicGoal("carbs_goal")} icon={<Wheat size={20}/>} color={{bg:'bg-amber-50',text:'text-amber-500',bar:'bg-amber-500'}} />
+        <ProgressBar label="Fat" value={totals.fat} goal={getDynamicGoal("fat_goal")} icon={<Droplets size={20}/>} color={{bg:'bg-red-50',text:'text-red-500',bar:'bg-red-500'}} />
+        <ProgressBar label="Calories" value={totals.calories} goal={calorieGoal} icon={<Flame size={20}/>} color={{bg:'bg-orange-50',text:'text-orange-500',bar:'bg-green-500'}} />
       </div>
 
-      {/* CHARTS */}
+      {/* CHARTS — NOT TOUCHED */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
         <div className="bg-white p-8 rounded-4xl shadow-sm border border-slate-100 flex flex-col min-h-112.5">
           <h3 className="text-lg font-bold text-slate-900 mb-6">Calories Trend</h3>
@@ -251,7 +249,7 @@ const Dashboard = () => {
           <div className="h-72"><CategoryChart /></div>
         </div>
       </div>
-      
+
       <div className="text-center text-slate-400 text-xs font-medium pb-8">
         © 2026 NutriVision, Inc.
       </div>

@@ -91,7 +91,8 @@ function Sidebar() {
         fat_goal: Number(form.fat_goal) || 0,
         goal_source: "manual" 
       });
-      setShowGoals(false);
+      // ❌ REMOVE THIS LINE
+      // setShowGoals(false);    
     } catch (err) {
       console.error("Save failed:", err.message);
     } finally {

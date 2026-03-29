@@ -28,6 +28,7 @@ const ScanFood = () => {
   const token = localStorage.getItem("token");
   
   const reviewRef = useRef(null);
+  const debounceRef = useRef(null);
 
   const [mode, setMode] = useState("ai");
   const [image, setImage] = useState(null);
@@ -116,16 +117,42 @@ const ScanFood = () => {
   };
 
   const fetchNutrition = async (foodName, qty, u) => {
-    if (!foodName) return;
+    // ✅ Fix null check
+    if (!foodName || qty == null) return;
+
+    // ✅ Add zero protection HERE
+    if (qty <= 0) {
+      setCalories(null);
+      setProtein(null);
+      setCarbs(null);
+      setFat(null);
+      return;
+    }
+
     try {
       setLoading(true);
       setProcessingType("nutrition");
-      const nutritionData = await getScannedNutrition(foodName, qty, u);
+
+      const nutritionData = await getScannedNutrition(foodName, 100, "g");
+
       const n = nutritionData?.nutrition;
-      setCalories(n?.calories ?? "");
-      setProtein(n?.protein ?? "");
-      setCarbs(n?.carbs ?? "");
-      setFat(n?.fat ?? "");
+      if (!n) {
+        setCalories(null);
+        setProtein(null);
+        setCarbs(null);
+        setFat(null);
+        return;
+      }
+
+      // Convert to grams
+      const qtyInGrams = u === "kg" ? qty * 1000 : qty;
+      const factor = qtyInGrams / 100;
+
+      setCalories(n?.calories != null ? n.calories * factor : null);
+      setProtein(n?.protein != null ? n.protein * factor : null);
+      setCarbs(n?.carbs != null ? n.carbs * factor : null);
+      setFat(n?.fat != null ? n.fat * factor : null);
+
     } catch (err) {
       console.error(err);
     } finally {
@@ -180,10 +207,10 @@ const ScanFood = () => {
       } else {
         await addMeal({
           name: food,
-          calories: Number(calories) || 0,
-          protein: Number(protein) || 0,
-          carbs: Number(carbs) || 0,
-          fat: Number(fat) || 0,
+          calories: calories ?? null,
+          protein: protein ?? null,
+          carbs: carbs ?? null,
+          fat: fat ?? null,
           category
         });
       }
@@ -363,13 +390,59 @@ const ScanFood = () => {
                 <div className="flex-1 space-y-1">
                   <p className="text-[10px] uppercase font-black text-slate-400 ml-1">Quantity</p>
                   <div className="relative">
-                    <input type="number" value={quantity} onChange={(e) => { setQuantity(Number(e.target.value)); fetchNutrition(scannedFood, Number(e.target.value), unit); }} className="w-full p-3 bg-white rounded-xl border border-blue-200 outline-none font-bold text-slate-800" />
+                    <input
+                      type="number"
+                      value={quantity ?? ""}
+                      onChange={(e) => {
+                        const val = e.target.value === "" ? null : Number(e.target.value);
+                        setQuantity(val);
+
+                        if (val != null && val > 0) {
+
+                          // 🔥 CLEAR PREVIOUS TIMER
+                          if (debounceRef.current) {
+                            clearTimeout(debounceRef.current);
+                          }
+
+                          // 🔥 DELAY API CALL
+                          debounceRef.current = setTimeout(() => {
+                            fetchNutrition(scannedFood, val, unit);
+                          }, 500);
+
+                        } else {
+                          setCalories(null);
+                          setProtein(null);
+                          setCarbs(null);
+                          setFat(null);
+                        }
+                      }}
+                      className="w-full p-3 bg-white rounded-xl border border-blue-200 outline-none font-bold text-slate-800"
+                    />
                     <Scale size={16} className="absolute right-3 top-3.5 text-blue-300" />
                   </div>
                 </div>
                 <div className="w-32 space-y-1">
                   <p className="text-[10px] uppercase font-black text-slate-400 ml-1">Unit</p>
-                  <select value={unit} onChange={(e) => { setUnit(e.target.value); fetchNutrition(scannedFood, quantity, e.target.value); }} className="w-full p-3 bg-white rounded-xl border border-blue-200 outline-none font-bold text-slate-800">
+                  <select
+                    value={unit}
+                    onChange={(e) => {
+                      const newUnit = e.target.value;
+                      setUnit(newUnit);
+
+                      if (quantity != null && quantity > 0) {
+
+                        // 🔥 CLEAR PREVIOUS TIMER
+                        if (debounceRef.current) {
+                          clearTimeout(debounceRef.current);
+                        }
+
+                        // 🔥 DELAY API CALL
+                        debounceRef.current = setTimeout(() => {
+                          fetchNutrition(scannedFood, quantity, newUnit);
+                        }, 500);
+
+                      }
+                    }}className="w-full p-3 bg-white rounded-xl border border-blue-200 outline-none font-bold text-slate-800">
                     <option value="g">Grams</option>
                     <option value="kg">Kgs</option>
                   </select>
@@ -406,7 +479,12 @@ const ScanFood = () => {
               <div key={field.label} className="space-y-1">
                 <p className="text-[10px] uppercase font-black text-slate-400 ml-1">{field.label}</p>
                 <div className="relative">
-                  <input type="number" value={field.val} onChange={(e) => field.set(e.target.value)} className="w-full p-4 bg-slate-50 rounded-2xl border-none font-black focus:ring-2 focus:ring-green-500 outline-none" />
+                  <input
+                    type="number"
+                    value={field.val ?? ""}
+                    onChange={(e) =>
+                      field.set(e.target.value === "" ? null : Number(e.target.value))
+                    } className="w-full p-4 bg-slate-50 rounded-2xl border-none font-black focus:ring-2 focus:ring-green-500 outline-none" />
                   <span className="absolute right-4 top-4 text-[10px] font-bold text-slate-400">{field.unit}</span>
                 </div>
               </div>
