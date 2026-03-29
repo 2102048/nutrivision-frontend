@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Lock, Loader2, ArrowRight, Sparkles, CheckCircle2, ShieldAlert } from "lucide-react";
 
-const BASE_URL = "http://127.0.0.1:8000";
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 function ResetPassword() {
   const { token } = useParams();
