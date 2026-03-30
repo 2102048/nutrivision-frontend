@@ -10,6 +10,9 @@ import {
   AlertCircle
 } from "lucide-react";
 
+const BASE_URL = import.meta.env.VITE_API_URL; // ✅ ADD THIS HERE
+
+
 const AINutritionAssistant = () => {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -84,7 +87,7 @@ const AINutritionAssistant = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:8000/ai-assistant", {
+      const res = await fetch(`${BASE_URL}/ai-assistant`,  {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
