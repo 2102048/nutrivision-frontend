@@ -20,7 +20,7 @@ import {
 
 import VoiceFoodLogger from "../../components/VoiceFoodLogger";
 
-const API = "http://localhost:8000";
+const API = import.meta.env.VITE_API_URL;
 
 const ScanFood = () => {
   const { addMeal } = useContext(AppContext);
