@@ -2,7 +2,6 @@ import { useContext, useState, useMemo } from "react";
 import { AppContext } from "../../context/AppContext";
 import { 
   Search, 
-  Calendar, 
   Trash2, 
   Filter, 
   Clock, 
@@ -139,13 +138,18 @@ const History = () => {
             <Filter size={14} className="absolute right-3 top-3.5 text-slate-400 pointer-events-none" />
           </div>
 
-          {/* DATE */}
+          {/* ✅ FIXED DATE INPUT */}
           <input
-            type="date"
+            type={selectedDate ? "date" : "text"}
             value={selectedDate}
+            placeholder="Select date (DD-MM-YYYY)"
+            onFocus={(e) => (e.target.type = "date")}
+            onBlur={(e) => {
+              if (!selectedDate) e.target.type = "text";
+            }}
             onChange={(e) => {
               setSelectedDate(e.target.value);
-              if(e.target.value) setQuickFilter("all");
+              if (e.target.value) setQuickFilter("all");
             }}
             className="w-full p-3 bg-slate-50 rounded-xl font-bold text-slate-700 outline-none text-sm md:text-base"
           />
