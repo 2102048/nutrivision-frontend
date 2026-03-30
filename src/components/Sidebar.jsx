@@ -160,60 +160,113 @@ function Sidebar({ isOpen, setIsOpen }) {
             </div>
           ))}
 
-          {/* GOALS */}
-          <div className="pt-4 border-t">
+          {/* Daily Goals Section */}
+          <div className="pt-4 border-t border-slate-50">
             <button
               onClick={() => setShowGoals(!showGoals)}
-              className="w-full flex justify-between px-4 py-3"
+              className={`w-full flex justify-between items-center px-4 py-3 rounded-xl transition-all ${
+                showGoals ? "bg-slate-50 text-slate-900" : "text-slate-600 hover:text-slate-900"
+              }`}
             >
-              🎯 Daily Goals
+              <span className="flex items-center gap-3 font-bold text-[14px]">
+                🎯 Daily Goals
+              </span>
+
               <div className="flex items-center gap-2">
                 {isManualSource && (
-                  <span className="text-[10px] bg-white border px-1 rounded">
+                  <span className="text-[9px] bg-white text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 font-bold uppercase">
                     Manual
                   </span>
                 )}
                 {isBMISource && (
-                  <span className="text-[10px] bg-indigo-50 border px-1 rounded">
+                  <span className="text-[9px] bg-indigo-50 text-indigo-600 px-1.5 py-0.5 rounded border border-indigo-100 font-bold uppercase">
                     BMI
                   </span>
                 )}
-                {showGoals ? <ChevronUpIcon className="w-4" /> : <ChevronDownIcon className="w-4" />}
+                {showGoals ? (
+                  <ChevronUpIcon className="w-4 h-4" />
+                ) : (
+                  <ChevronDownIcon className="w-4 h-4" />
+                )}
               </div>
             </button>
 
             {showGoals && (
-              <div ref={goalsEndRef} className="p-4 space-y-4">
-                <div className="flex items-center gap-2 text-xs">
-                  <CheckBadgeIcon className="w-4 h-4" />
-                  {isBMISource ? "Synced with BMI" : "Manual Targets"}
-                </div>
+              <div
+                ref={goalsEndRef}
+                className="mt-2 px-1 pb-4 animate-in fade-in slide-in-from-top-4 duration-300"
+              >
+                <div className="p-5 bg-white rounded-2xl space-y-6 border border-slate-200 shadow-sm">
+                  
+                  {/* Status Indicator */}
+                  <div
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${
+                      isBMISource
+                        ? "bg-indigo-50 border-indigo-100 text-indigo-600"
+                        : "bg-slate-50 border-slate-100 text-slate-500"
+                    }`}
+                  >
+                    <CheckBadgeIcon className="w-4 h-4 shrink-0" />
+                    <span className="text-[10px] font-bold uppercase tracking-tight">
+                      {isBMISource
+                        ? "Synced with BMI Analysis"
+                        : "Manual Macro Targets"}
+                    </span>
+                  </div>
 
-                <div className="text-2xl font-bold">
-                  {calculatedCalories} kcal
-                </div>
+                  {/* Calorie Display */}
+                  <div className="space-y-1">
+                    <label className="text-[10px] uppercase tracking-wider font-black text-slate-400 block">
+                      Daily Calorie Target
+                    </label>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-3xl font-black text-slate-900 tracking-tight leading-none">
+                        {calculatedCalories}
+                      </span>
+                      <span className="text-sm text-slate-400 font-bold">kcal</span>
+                    </div>
+                  </div>
 
-                <div className="grid grid-cols-3 gap-2">
-                  {["protein_goal","carbs_goal","fat_goal"].map((key) => (
-                    <input
-                      key={key}
-                      value={form[key]}
-                      onChange={(e) => handleChange(key, e.target.value)}
-                      className="p-2 border rounded text-center"
-                    />
-                  ))}
-                </div>
+                  {/* Macro Inputs */}
+                  <div className="grid grid-cols-3 gap-2.5">
+                    {[
+                      { label: "Protein", key: "protein_goal", color: "text-blue-600" },
+                      { label: "Carbs", key: "carbs_goal", color: "text-orange-600" },
+                      { label: "Fats", key: "fat_goal", color: "text-yellow-600" },
+                    ].map((m) => (
+                      <div key={m.key} className="space-y-2">
+                        <label
+                          className={`text-[10px] uppercase font-black block leading-none text-center ${m.color}`}
+                        >
+                          {m.label}
+                        </label>
+                        <input
+                          type="number"
+                          value={form[m.key]}
+                          onChange={(e) => handleChange(m.key, e.target.value)}
+                          className="w-full py-3 bg-slate-50 border border-slate-200 rounded-xl text-center text-[15px] focus:ring-2 focus:ring-green-500/20 focus:border-green-500 outline-none font-bold text-slate-800 transition-all shadow-inner appearance-none m-0"
+                        />
+                      </div>
+                    ))}
+                  </div>
 
-                <button
-                  onClick={handleSave}
-                  disabled={saving}
-                  className="w-full bg-green-600 text-white p-3 rounded"
-                >
-                  {saving ? "Updating..." : "Apply Goals"}
-                </button>
+                  {/* Save Button */}
+                  <button
+                    onClick={handleSave}
+                    disabled={saving}
+                    className="w-full py-4 bg-green-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-green-700 disabled:bg-slate-200 disabled:text-slate-400 transition-all shadow-lg shadow-green-100 active:scale-[0.97]"
+                  >
+                    {saving ? "Updating..." : "Apply Goals"}
+                  </button>
+
+                  <p className="text-[10px] text-center text-slate-400 font-medium italic">
+                    Changes will set source to "Manual"
+                  </p>
+                </div>
               </div>
             )}
           </div>
+
         </nav>
       </aside>
     </>
