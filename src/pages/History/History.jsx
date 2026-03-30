@@ -18,14 +18,6 @@ const parseDate = (value) => {
   return isNaN(date.getTime()) ? null : date;
 };
 
-/* ✅ FORMAT DATE FOR DISPLAY (DD/MM/YYYY) */
-const formatDisplayDate = (value) => {
-  if (!value) return "";
-  const d = new Date(value);
-  if (isNaN(d)) return "";
-  return d.toLocaleDateString("en-GB"); // dd/mm/yyyy
-};
-
 const History = () => {
   const { history, deleteMeal } = useContext(AppContext);
 
@@ -146,22 +138,22 @@ const History = () => {
             <Filter size={14} className="absolute right-3 top-3.5 text-slate-400 pointer-events-none" />
           </div>
 
-          {/* DATE + FIX */}
+          {/* ✅ DATE FIXED FOR MOBILE */}
           <div className="flex flex-col gap-1">
             <input
               type="date"
-              value={selectedDate}
+              value={selectedDate || ""}
               onChange={(e) => {
-                setSelectedDate(e.target.value);
-                if(e.target.value) setQuickFilter("all");
+                const value = e.target.value;
+                setSelectedDate(value || "");
+                if (value) setQuickFilter("all");
               }}
               className="w-full p-3 bg-slate-50 rounded-xl font-bold text-slate-700 outline-none text-sm md:text-base"
             />
 
-            {/* ✅ FIXED MOBILE DISPLAY */}
-            {selectedDate && (
+            {selectedDate && !isNaN(new Date(selectedDate)) && (
               <span className="text-xs text-slate-500 font-medium px-1">
-                Selected: {formatDisplayDate(selectedDate)}
+                Selected: {new Date(selectedDate).toLocaleDateString("en-GB")}
               </span>
             )}
           </div>
