@@ -2,6 +2,7 @@ import { useContext, useState, useMemo } from "react";
 import { AppContext } from "../../context/AppContext";
 import { 
   Search, 
+  Calendar, 
   Trash2, 
   Filter, 
   Clock, 
@@ -138,25 +139,16 @@ const History = () => {
             <Filter size={14} className="absolute right-3 top-3.5 text-slate-400 pointer-events-none" />
           </div>
 
-          {/* ✅ DATE FIXED FOR MOBILE */}
-          <div className="flex flex-col gap-1">
-            <input
-              type="date"
-              value={selectedDate || ""}
-              onChange={(e) => {
-                const value = e.target.value;
-                setSelectedDate(value || "");
-                if (value) setQuickFilter("all");
-              }}
-              className="w-full p-3 bg-slate-50 rounded-xl font-bold text-slate-700 outline-none text-sm md:text-base"
-            />
-
-            {selectedDate && !isNaN(new Date(selectedDate)) && (
-              <span className="text-xs text-slate-500 font-medium px-1">
-                Selected: {new Date(selectedDate).toLocaleDateString("en-GB")}
-              </span>
-            )}
-          </div>
+          {/* DATE */}
+          <input
+            type="date"
+            value={selectedDate}
+            onChange={(e) => {
+              setSelectedDate(e.target.value);
+              if(e.target.value) setQuickFilter("all");
+            }}
+            className="w-full p-3 bg-slate-50 rounded-xl font-bold text-slate-700 outline-none text-sm md:text-base"
+          />
         </div>
 
         {/* QUICK FILTER */}
