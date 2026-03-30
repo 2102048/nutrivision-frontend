@@ -250,9 +250,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="text-center text-slate-400 text-xs font-medium pb-8">
-        © 2026 NutriVision, Inc.
-      </div>
+      
     </div>
   );
 };

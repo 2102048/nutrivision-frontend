@@ -134,9 +134,7 @@ function ForgotPassword() {
           )}
         </div>
         
-        <p className="text-center mt-8 text-slate-300 text-[10px] font-black uppercase tracking-[0.3em]">
-          © 2026 NutriVision, Inc.
-        </p>
+        
       </div>
     </div>
   );

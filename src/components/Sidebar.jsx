@@ -227,12 +227,7 @@ function Sidebar() {
         </div>
       </nav>
 
-      {/* Footer */}
-      <div className="p-8 pt-4 border-t border-slate-50">
-        <div className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">
-          © 2026 NutriVision, Inc.
-        </div>
-      </div>
+      
     </aside>
   );
 }
