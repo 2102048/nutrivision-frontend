@@ -255,25 +255,35 @@ const AINutritionAssistant = () => {
 
       {/* INPUT */}
       <div className="p-3 md:p-6 bg-white border-t border-slate-100">
-        <div className="flex items-center gap-2 md:gap-3 bg-slate-50 border p-2 rounded-2xl md:rounded-3xl">
-          
+        <div className="flex items-center w-full gap-2 bg-slate-50 border border-slate-200 p-2 rounded-2xl md:rounded-3xl">
+
+          {/* INPUT */}
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask about your diet..."
-            className="flex-1 bg-transparent outline-none px-2 md:px-4 py-2 text-sm"
+            className="flex-1 min-w-0 bg-transparent outline-none px-2 md:px-4 py-2 text-sm text-slate-700 placeholder:text-slate-400"
             onKeyDown={(e) => e.key === "Enter" && sendMessage()}
           />
 
-          <button onClick={startListening} className="p-2 md:p-3">
+          {/* MIC BUTTON */}
+          <button
+            onClick={startListening}
+            className={`shrink-0 p-2.5 md:p-3 rounded-xl transition-all ${
+              listening
+                ? "bg-red-500 text-white animate-pulse"
+                : "text-slate-400 hover:bg-slate-200"
+            }`}
+          >
             {listening ? <MicOff size={18} /> : <Mic size={18} />}
           </button>
 
+          {/* SEND BUTTON */}
           <button
             onClick={() => sendMessage()}
             disabled={loading || !input.trim()}
-            className="bg-blue-600 text-white p-2 md:p-3 rounded-xl"
+            className="shrink-0 bg-blue-600 text-white p-2.5 md:p-3 rounded-xl disabled:bg-slate-200"
           >
             <Send size={18} />
           </button>
