@@ -34,17 +34,27 @@ const Profile = () => {
     const fetchData = async () => {
       try {
         const profileData = await getProfile();
-        const healthData = await getHealth();
+
+        let healthData = null;
+
+        try {
+          healthData = await getHealth();
+        }catch {
+          console.warn("No health data yet (expected for new users)");
+          healthData = null;
+        }
 
         setProfile(profileData);
         setHealth(healthData);
 
         setNewName(profileData.name);
         setNewEmail(profileData.email);
+
       } catch (error) {
         console.error("Error fetching profile:", error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     fetchData();
   }, []);
@@ -182,10 +192,10 @@ const Profile = () => {
 
           <div className="space-y-4">
             {[
-              { label: "Age", value: health?.age, unit: "yrs" },
-              { label: "Gender", value: health?.gender, unit: "" },
-              { label: "Height", value: health?.height_cm, unit: "cm" },
-              { label: "Weight", value: health?.weight_kg, unit: "kg" },
+              { label: "Age", value: health?.age ?? "Not set", unit: "yrs" },
+              { label: "Gender", value: health?.gender ?? "Not set", unit: "" },
+              { label: "Height", value: health?.height_cm ?? "Not set", unit: "cm" },
+              { label: "Weight", value: health?.weight_kg ?? "Not set", unit: "kg" },
             ].map((stat, i) => (
               <div key={i} className="flex justify-between items-center p-3 bg-slate-50 rounded-2xl group hover:bg-slate-100 transition-colors">
                 <span className="text-xs font-black text-slate-400 uppercase tracking-widest">{stat.label}</span>
@@ -195,7 +205,12 @@ const Profile = () => {
               </div>
             ))}
           </div>
-
+          {/* ✅ ADD HERE */}
+          {!health && (
+            <p className="text-xs text-orange-500 text-center mt-2 font-bold">
+              No health data yet. Please calculate BMI first.
+            </p>
+          )}
           <div className="p-4 bg-orange-50/50 rounded-2xl border border-dashed border-orange-200">
             <p className="text-[10px] text-orange-600 font-bold text-center uppercase tracking-tighter">
               Metrics are synced from your latest body assessment
