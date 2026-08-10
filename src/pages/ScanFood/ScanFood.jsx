@@ -60,6 +60,9 @@ const ScanFood = () => {
 
   // Recalculate totals and meal name when aiFoods list changes
   useEffect(() => {
+
+    if (mode !== "ai") return; // ✅ IMPORTANT FIX
+
     if (aiFoods.length === 0) {
       // Don't reset if we have a scanned food item manually set
       if (!scannedFood) {
@@ -80,7 +83,7 @@ const ScanFood = () => {
 
     const names = aiFoods.map(f => f.food_name).join(", ");
     setFood(names);
-  }, [aiFoods, scannedFood]);
+  }, [aiFoods, scannedFood, mode]);
 
   const handleDeleteItem = (index) => {
     const updated = aiFoods.filter((_, i) => i !== index);
@@ -99,24 +102,44 @@ const ScanFood = () => {
   };
 
   const handleScan = async () => {
-    if (!image) return;
-    try {
-      setLoading(true);
-      setProcessingType("scan");
-      const scanResult = await scanFoodImage(image);
-      const detectedFood = scanResult.food_detected;
-      setScannedFood(detectedFood);
-      setFood(detectedFood);
-      await fetchNutrition(detectedFood, quantity, unit);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-      setProcessingType("");
+  if (!image) return;
+
+  try {
+    setLoading(true);
+    setProcessingType("scan");
+
+    const scanResult = await scanFoodImage(image);
+
+    console.log("SCAN RESULT:", scanResult);
+
+    // ✅ FINAL FIX (handles nested object)
+    const detectedFood = scanResult.food_detected?.food_type;
+
+    if (!detectedFood) {
+      console.error("❌ No food detected");
+      return;
     }
-  };
+
+    console.log("✅ Detected Food:", detectedFood);
+
+    setScannedFood(detectedFood);
+    setFood(detectedFood);
+
+    await fetchNutrition(detectedFood, quantity, unit);
+
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setLoading(false);
+    setProcessingType("");
+  }
+};
 
   const fetchNutrition = async (foodName, qty, u) => {
+    if (typeof foodName !== "string") {
+    console.error("❌ Invalid foodName:", foodName);
+    return;
+  }
     // ✅ Fix null check
     if (!foodName || qty == null) return;
 
@@ -245,7 +268,14 @@ const ScanFood = () => {
       {/* MODE TABS */}
       <div className="flex p-1.5 bg-slate-100 rounded-2xl border border-slate-200">
         <button
-          onClick={() => setMode("ai")}
+          onClick={() => {
+            setMode("ai");
+
+            // ✅ CLEAR SCAN DATA
+            setScannedFood(null);
+            setImage(null);
+            setPreview(null);
+          }}
           className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold transition-all ${
             mode === "ai" ? "bg-white text-blue-600 shadow-sm" : "text-slate-500 hover:text-slate-700"
           }`}
@@ -253,7 +283,13 @@ const ScanFood = () => {
           <MessageSquare size={18} /> Describe
         </button>
         <button
-          onClick={() => setMode("scan")}
+          onClick={() => {
+            setMode("scan");
+
+            // ✅ CLEAR AI DATA
+            setAiFoods([]);
+            setAiInput("");
+          }}
           className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold transition-all ${
             mode === "scan" ? "bg-white text-blue-600 shadow-sm" : "text-slate-500 hover:text-slate-700"
           }`}
@@ -384,7 +420,9 @@ const ScanFood = () => {
             <div ref={reviewRef} className="p-5 bg-blue-50 rounded-2xl border border-blue-100 space-y-4 animate-in fade-in duration-500">
               <div className="flex items-center gap-2 text-blue-700">
                 <CheckCircle2 size={18} />
-                <span className="font-bold">Detected: {scannedFood}</span>
+                <span className="font-bold">
+                  Detected: {typeof scannedFood === "string" ? scannedFood : "Invalid"}
+                </span>
               </div>
               <div className="flex gap-3">
                 <div className="flex-1 space-y-1">

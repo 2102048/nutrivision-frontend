@@ -186,7 +186,11 @@ export const scanFoodImage = async (file) => {
 };
 
 export const getScannedNutrition = (food, quantity = 1, unit = "piece") => {
-  const params = new URLSearchParams({ food, quantity, unit });
+  const params = new URLSearchParams({
+    food: typeof food === "string" ? food : food?.food_type || "",
+    quantity,
+    unit,
+  });
   return request(`/scan/nutrition?${params.toString()}`);
 };
 
